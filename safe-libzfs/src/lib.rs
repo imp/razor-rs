@@ -18,6 +18,7 @@
 
 use std::borrow::Cow;
 use std::ffi;
+use std::ops;
 
 use razor_libzfs as libzfs;
 use razor_nvpair as nvpair;
@@ -25,11 +26,13 @@ use razor_nvpair as nvpair;
 pub use libzfs::zfs_canmount_type_t;
 pub use libzfs::zfs_prop_t;
 
-pub use self::collector::DatasetCollectorBuilder;
+// pub use self::collector::DatasetIteratorBuilder;
 pub use self::error::ZfsError;
+pub use self::iterator::DatasetIteratorBuilder;
 
-mod collector;
+// mod collector;
 mod error;
+mod iterator;
 
 #[derive(Debug)]
 pub struct ZfsHandle {
@@ -114,6 +117,14 @@ impl From<*mut libzfs::zfs_handle_t> for ZfsHandle {
     }
 }
 
+impl ops::Deref for ZfsHandle {
+    type Target = *mut libzfs::zfs_handle_t;
+
+    fn deref(&self) -> &Self::Target {
+        &self.handle
+    }
+}
+
 impl Drop for ZfsHandle {
     fn drop(&mut self) {
         unsafe { libzfs::zfs_close(self.handle) };
@@ -149,12 +160,12 @@ pub fn libzfs_errno() -> i32 {
     unsafe { libzfs::libzfs_errno() }
 }
 
-pub fn zfs_list() -> DatasetCollectorBuilder {
-    DatasetCollectorBuilder::new()
+pub fn zfs_list_root() -> DatasetIteratorBuilder {
+    DatasetIteratorBuilder::new()
 }
 
-pub fn zfs_list_from(name: impl AsRef<str>) -> DatasetCollectorBuilder {
-    DatasetCollectorBuilder::from(name)
+pub fn zfs_list_from(name: impl AsRef<str>) -> DatasetIteratorBuilder {
+    DatasetIteratorBuilder::from(name)
 }
 
 pub fn create_filesystem(
