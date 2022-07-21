@@ -18,21 +18,27 @@ impl DatasetIterator {
     fn iter_root(&self) -> Vec<*mut libzfs::zfs_handle_t> {
         let mut datasets: Vec<*mut libzfs::zfs_handle_t> = vec![];
         let ptr = &mut datasets as *mut _ as *mut libc::c_void;
-        unsafe { libzfs::zfs_iter_root(Some(zfs_list_cb), ptr) }
+        unsafe {
+            libzfs::zfs_iter_root(Some(zfs_list_cb), ptr);
+        }
         datasets
     }
 
     fn iter_filesystem(&self, parent: *mut libzfs::zfs_handle_t) -> Vec<*mut libzfs::zfs_handle_t> {
         let mut datasets: Vec<*mut libzfs::zfs_handle_t> = vec![];
         let ptr = &mut datasets as *mut _ as *mut libc::c_void;
-        unsafe { libzfs::zfs_iter_filesystems(parent, Some(zfs_list_cb), ptr) }
+        unsafe {
+            libzfs::zfs_iter_filesystems(parent, Some(zfs_list_cb), ptr);
+        }
         datasets
     }
 
     fn iter_snapshots(&self, parent: *mut libzfs::zfs_handle_t) -> Vec<*mut libzfs::zfs_handle_t> {
         let mut datasets: Vec<*mut libzfs::zfs_handle_t> = vec![];
         let ptr = &mut datasets as *mut _ as *mut libc::c_void;
-        unsafe { libzfs::zfs_iter_snapshots(parent, false, Some(zfs_list_cb), ptr, 0, 0) }
+        unsafe {
+            libzfs::zfs_iter_snapshots(parent, false, Some(zfs_list_cb), ptr, 0, 0);
+        }
         datasets
     }
 }

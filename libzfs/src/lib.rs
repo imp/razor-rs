@@ -175,17 +175,17 @@ pub unsafe fn zvol_volsize_to_reservation(
     sys::zvol_volsize_to_reservation(zpool_handle, volsize, props)
 }
 
-pub unsafe fn zfs_iter_root(callback: sys::zfs_iter_f, ptr: *mut libc::c_void) {
-    sys::zfs_iter_root(LIBZFS_HANDLE.handle(), callback, ptr);
+pub unsafe fn zfs_iter_root(callback: sys::zfs_iter_f, ptr: *mut libc::c_void) -> libc::c_int {
+    sys::zfs_iter_root(LIBZFS_HANDLE.handle(), callback, ptr)
 }
 
 pub unsafe fn zfs_iter_filesystems(
     handle: *mut sys::zfs_handle_t,
     callback: sys::zfs_iter_f,
     ptr: *mut libc::c_void,
-) {
+) -> libc::c_int {
     Lazy::force(&LIBZFS_HANDLE);
-    sys::zfs_iter_filesystems(handle, callback, ptr);
+    sys::zfs_iter_filesystems(handle, callback, ptr)
 }
 
 pub unsafe fn zfs_iter_snapshots(
@@ -195,10 +195,19 @@ pub unsafe fn zfs_iter_snapshots(
     data: *mut libc::c_void,
     min_txg: u64,
     max_txg: u64,
-) {
+) -> libc::c_int {
     Lazy::force(&LIBZFS_HANDLE);
     let simple = simple.into();
-    sys::zfs_iter_snapshots(handle, simple, callback, data, min_txg, max_txg);
+    sys::zfs_iter_snapshots(handle, simple, callback, data, min_txg, max_txg)
+}
+
+pub unsafe fn zfs_iter_bookmarks(
+    handle: *mut sys::zfs_handle_t,
+    callback: sys::zfs_iter_f,
+    ptr: *mut libc::c_void,
+) -> libc::c_int {
+    Lazy::force(&LIBZFS_HANDLE);
+    sys::zfs_iter_bookmarks(handle, callback, ptr)
 }
 
 pub unsafe fn zfs_create(
