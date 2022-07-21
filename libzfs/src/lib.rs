@@ -76,6 +76,11 @@ pub unsafe fn zfs_get_type(handle: *mut sys::zfs_handle_t) -> zfs_type_t {
     sys::zfs_get_type(handle)
 }
 
+pub unsafe fn zfs_type_to_name(r#type: zfs_type_t) -> *const libc::c_char {
+    Lazy::force(&LIBZFS_HANDLE);
+    sys::zfs_type_to_name(r#type)
+}
+
 pub unsafe fn zfs_get_all_props(handle: *mut sys::zfs_handle_t) -> *mut libnvpair::nvlist_t {
     Lazy::force(&LIBZFS_HANDLE);
     sys::zfs_get_all_props(handle)
