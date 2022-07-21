@@ -9,9 +9,7 @@ pub struct Snapshot {
 
 impl Snapshot {
     pub fn get(name: impl AsRef<str>) -> Result<Self> {
-        let cname = ffi::CString::new(name.as_ref())?;
-        let dataset = libzfs::ZfsHandle::new(cname)?;
-
+        let dataset = libzfs::ZfsHandle::new(name)?;
         Ok(Self { dataset })
     }
 

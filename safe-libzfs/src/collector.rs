@@ -1,5 +1,3 @@
-use std::ffi::CString;
-
 use once_cell::sync::Lazy;
 use parking_lot::Mutex;
 
@@ -115,8 +113,7 @@ impl DatasetCollectorBuilder {
         let handle = self
             .from_dataset
             .as_ref()
-            .and_then(|name| CString::new(name.as_bytes()).ok())
-            .and_then(|cname| ZfsHandle::new(cname).ok());
+            .and_then(|name| ZfsHandle::new(name).ok());
 
         let children = Self::get_children(handle.as_ref(), self.r#type);
 

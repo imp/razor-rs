@@ -1,5 +1,3 @@
-use std::ffi;
-
 use razor_nvpair as nvpair;
 
 use super::*;

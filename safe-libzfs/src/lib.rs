@@ -39,7 +39,8 @@ pub struct ZfsHandle {
 unsafe impl ::std::marker::Send for ZfsHandle {}
 
 impl ZfsHandle {
-    pub fn new(name: ffi::CString) -> Result<Self, ZfsError> {
+    pub fn new(name: impl AsRef<str>) -> Result<Self, ZfsError> {
+        let name = cstring(name)?;
         let handle = unsafe { libzfs::zfs_open(name.as_ptr()) };
 
         if !handle.is_null() {

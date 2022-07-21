@@ -167,9 +167,7 @@ impl Filesystem {
     }
 
     pub fn get(name: impl AsRef<str>) -> Result<Self> {
-        let cname = ffi::CString::new(name.as_ref())?;
-        let dataset = libzfs::ZfsHandle::new(cname)?;
-
+        let dataset = libzfs::ZfsHandle::new(name)?;
         Ok(Self { dataset })
     }
 }
@@ -225,9 +223,9 @@ impl FilesystemBuilder {
 
     // TODO: should check mount options and mount the FS if needed
     pub fn create(self, name: impl AsRef<str>) -> Result<Filesystem> {
-        let cname = ffi::CString::new(name.as_ref())?;
+        let name = name.as_ref();
         libzfs::create_filesystem(name, self.props)?;
-        let dataset = libzfs::ZfsHandle::new(cname)?;
+        let dataset = libzfs::ZfsHandle::new(name)?;
         let filesystem = Filesystem { dataset };
 
         Ok(filesystem)

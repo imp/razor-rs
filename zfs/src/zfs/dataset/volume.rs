@@ -1,5 +1,3 @@
-use std::ffi::CString;
-
 use serde::ser::{Serialize, SerializeStruct, Serializer};
 
 use super::*;
@@ -35,9 +33,7 @@ impl Volume {
     }
 
     pub fn get(name: impl AsRef<str>) -> Result<Self> {
-        let cname = CString::new(name.as_ref())?;
-        let dataset = libzfs::ZfsHandle::new(cname)?;
-
+        let dataset = libzfs::ZfsHandle::new(name)?;
         Ok(Self { dataset })
     }
 
@@ -179,14 +175,13 @@ impl VolumeBuilder {
         }
 
         let name = name.as_ref();
-        let cname = CString::new(name)?;
 
         self.props.volsize(size);
         self.props.volblocksize(self.volblocksize);
 
         lzc::create_volume(name, self.props.into_inner())?;
 
-        let dataset = libzfs::ZfsHandle::new(cname)?;
+        let dataset = libzfs::ZfsHandle::new(name)?;
         let volume = Volume { dataset };
 
         Ok(volume)

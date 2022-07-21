@@ -9,9 +9,7 @@ pub struct Bookmark {
 
 impl Bookmark {
     pub fn get(name: impl AsRef<str>) -> Result<Self> {
-        let name = ffi::CString::new(name.as_ref())?;
         let dataset = libzfs::ZfsHandle::new(name)?;
-
         Ok(Self { dataset })
     }
 
