@@ -1,6 +1,9 @@
 #![allow(non_camel_case_types)]
 #![allow(deref_nullptr)]
 
+use std::borrow::Cow;
+use std::ffi::CStr;
+
 use razor_libnvpair::*;
 
 include!(concat!(env!("OUT_DIR"), "/zfs.rs"));
@@ -38,5 +41,18 @@ impl zfs_type_t {
 
     pub fn contains(&self, other: zfs_type_t) -> bool {
         *self & other != zfs_type_t(0)
+    }
+
+    pub fn name(&self) -> Cow<'static, str> {
+        (*self).into()
+    }
+}
+
+impl From<zfs_type_t> for Cow<'static, str> {
+    fn from(r#type: zfs_type_t) -> Self {
+        unsafe {
+            let cstr = zfs_type_to_name(r#type);
+            CStr::from_ptr(cstr).to_string_lossy()
+        }
     }
 }
