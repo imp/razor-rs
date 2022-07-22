@@ -142,7 +142,7 @@ fn snapshots(dataset: impl AsRef<str>, snapshot: impl AsRef<str>, recursive: boo
         .filesystems()
         .volumes()
         .recursive(recursive)
-        .get_collection()
+        .get()?
         .into_iter()
         .map(|dataset| format!("{}@{}", dataset.name(), snapshot));
 

@@ -49,11 +49,11 @@ impl Zfs {
         lzc::dataset_exists(dataset)
     }
 
-    pub fn list() -> libzfs::DatasetCollectorBuilder {
-        libzfs::zfs_list()
+    pub fn list() -> libzfs::DatasetIteratorBuilder {
+        libzfs::zfs_list_root()
     }
 
-    pub fn list_from(name: impl AsRef<str>) -> libzfs::DatasetCollectorBuilder {
+    pub fn list_from(name: impl AsRef<str>) -> libzfs::DatasetIteratorBuilder {
         libzfs::zfs_list_from(name)
     }
 

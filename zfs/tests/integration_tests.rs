@@ -188,12 +188,12 @@ fn filesystem_snapshot() {
     let filesystem = Zfs::filesystem()
         .canmount(property::CanMount::On)
         .create(&name)
-        .unwrap();
+        .expect("create 1st filesystem");
     let name = format!("{}/{}", filesystem.name(), "another_fs_snapshot");
     let _another_filesystem = Zfs::filesystem()
         .canmount(property::CanMount::On)
         .create(&name)
-        .unwrap();
+        .expect("create 2nd filesystem");
     filesystem.snapshot("snap1").unwrap();
     filesystem.snapshot("snap2").unwrap();
     filesystem.snapshot("snap3").unwrap();
@@ -202,7 +202,8 @@ fn filesystem_snapshot() {
     let snapshots = Zfs::list_from(filesystem.name())
         .snapshots()
         .recursive(true)
-        .get_collection();
+        .get()
+        .expect("list snapshots");
 
     for snapshot in snapshots {
         dbg!(snapshot.name());
@@ -230,7 +231,11 @@ fn get_non_existent_filesystem() {
 
 #[test]
 fn list_filesystems() {
-    let datasets = Zfs::list().filesystems().recursive(true).get_collection();
+    let datasets = Zfs::list()
+        .filesystems()
+        .recursive(true)
+        .get()
+        .expect("list filesystems");
 
     for dataset in datasets {
         dbg!(dataset.name());
@@ -314,7 +319,11 @@ fn list_filesystems() {
 
 #[test]
 fn list_volumes() {
-    let datasets = Zfs::list().volumes().recursive(true).get_collection();
+    let datasets = Zfs::list()
+        .volumes()
+        .recursive(true)
+        .get()
+        .expect("list volumes");
 
     for dataset in datasets {
         dbg!(dataset.name());
@@ -328,7 +337,8 @@ fn list_all() {
         .filesystems()
         .volumes()
         .recursive(true)
-        .get_collection();
+        .get()
+        .expect("list al");
 
     for dataset in datasets {
         dbg!(dataset.name());
@@ -337,7 +347,11 @@ fn list_all() {
 
 #[test]
 fn list_all_non_recursive() {
-    let datasets = Zfs::list().filesystems().volumes().get_collection();
+    let datasets = Zfs::list()
+        .filesystems()
+        .volumes()
+        .get()
+        .expect("list all non recursive");
 
     for dataset in datasets {
         dbg!(dataset.name());

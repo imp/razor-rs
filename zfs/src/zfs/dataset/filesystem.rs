@@ -32,7 +32,7 @@ impl Filesystem {
             .volumes()
             .snapshots()
             .recursive(true)
-            .get_collection();
+            .get()?;
 
         for dataset in ns_datasets.into_iter() {
             lzc::destroy_dataset(dataset.name())?;

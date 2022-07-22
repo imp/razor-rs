@@ -26,11 +26,9 @@ use razor_nvpair as nvpair;
 pub use libzfs::zfs_canmount_type_t;
 pub use libzfs::zfs_prop_t;
 
-// pub use self::collector::DatasetIteratorBuilder;
 pub use self::error::ZfsError;
 pub use self::iterator::DatasetIteratorBuilder;
 
-// mod collector;
 mod error;
 mod iterator;
 
