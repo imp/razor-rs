@@ -154,6 +154,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fmtools"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06e445fbebce56ca378adcacced37a72833e752c1b07be05908c94f643d7b7c6"
+
+[[package]]
 name = "getrandom"
 version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -449,6 +455,7 @@ version = "0.13.0"
 dependencies = [
  "anyhow",
  "clap",
+ "fmtools",
  "razor-zfs",
 ]
 

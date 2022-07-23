@@ -17,6 +17,7 @@ use clap::Parser;
 use razor_cli as cli;
 
 use cli::zfs::Create;
+use cli::zfs::List;
 
 #[derive(Debug, Parser)]
 enum Command {
@@ -27,6 +28,10 @@ enum Command {
         #[clap(flatten)]
         create: Create,
     },
+    List {
+        #[clap(flatten)]
+        list: List,
+    },
 }
 
 impl Command {
@@ -34,6 +39,7 @@ impl Command {
         let text = match self {
             Self::Version => format!("CLI: {}", clap::crate_version!()),
             Self::Create { create } => create.exec()?,
+            Self::List { list } => list.exec()?,
         };
 
         Ok(text)
