@@ -34,11 +34,10 @@ impl Filesystem {
             .recursive(true)
             .get()?;
 
-        for dataset in ns_datasets.into_iter() {
+        for dataset in ns_datasets.into_iter().rev() {
             lzc::destroy_dataset(dataset.name())?;
         }
 
-        lzc::destroy_dataset(self.name())?;
         Ok(())
     }
 

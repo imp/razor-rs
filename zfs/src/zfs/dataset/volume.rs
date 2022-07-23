@@ -165,11 +165,6 @@ impl VolumeBuilder {
     //       4. add parents creation if needed
     //       5. add zfs_mount_and_share functionality
     pub fn create(mut self, name: impl AsRef<str>, size: u64) -> Result<Volume> {
-        #[inline]
-        fn _is_power_of_two(num: u64) -> bool {
-            (num != 0) && ((num & (num - 1)) == 0)
-        }
-
         if let Some(err) = self.err {
             return Err(err);
         }
