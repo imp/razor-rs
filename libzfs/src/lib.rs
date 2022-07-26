@@ -144,7 +144,7 @@ pub unsafe fn zfs_valid_proplist(
     zoned: bool,
     dataset_handle: *mut sys::zfs_handle_t,
     zpool_handle: *mut zpool_handle_t,
-    key_params_ok: bool,
+    key_params_ok: impl Into<libnvpair::boolean_t>,
     err_buf: *const libc::c_char,
 ) -> *mut libnvpair::nvlist_t {
     let zoned = zoned.into();
@@ -190,7 +190,7 @@ pub unsafe fn zfs_iter_filesystems(
 
 pub unsafe fn zfs_iter_snapshots(
     handle: *mut sys::zfs_handle_t,
-    simple: bool,
+    simple: impl Into<libnvpair::boolean_t>,
     callback: sys::zfs_iter_f,
     data: *mut libc::c_void,
     min_txg: u64,
