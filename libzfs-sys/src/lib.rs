@@ -48,6 +48,8 @@ impl zfs_type_t {
     }
 }
 
+// It is safe to call `zfs_type_to_name` anytime, even before before libzfs initialization.
+// So, this should be safe to use anywhere
 impl From<zfs_type_t> for Cow<'static, str> {
     fn from(r#type: zfs_type_t) -> Self {
         unsafe {
